@@ -10,7 +10,6 @@ build {
   name    = "nginx-2"
   sources = ["source.amazon-ebs.ubuntu"] 
 
-
   provisioner "file" {
     source      = "index.html"
     destination = "/tmp/"
@@ -18,8 +17,8 @@ build {
 
   provisioner "shell" {
     inline = [
-      "sudo mv /var/www/html/index.nginx-debian.html /var/www/html/index.backup
-      "sudo cp /tmp/index.html /var/www/html/"
+      "sudo mv /var/www/html/index.nginx-debian.html /var/www/html/index.html.backup",
+      "sudo cp /tmp/index.html /var/www/html/",
       "sudo systemctl restart nginx"
     ]
   }

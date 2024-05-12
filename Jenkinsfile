@@ -14,6 +14,7 @@ pipeline {
                 // Change directory to the cloned repository
                     // Run the build init command
                     sh 'packer init .'
+                    sh 'packer build .'
             }
         }
     }

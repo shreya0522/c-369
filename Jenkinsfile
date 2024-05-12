@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        PACKER_AMI_ID = ''
+        PACKER_AMI_ID = '' // Initialize PACKER_AMI_ID environment variable
     }
     
     stages {
@@ -14,11 +14,12 @@ pipeline {
         
         stage('Run Build Init') {
             steps {
-                    script {
-            // Run Packer build and capture the AMI ID
-            def packerOutput = sh(script: 'packer build .', returnStdout: true).trim()
-            PACKER_AMI_ID = packerOutput =~ /ami-.+/
-        }
+                script {
+                    // Run Packer build and capture the AMI ID
+                    def packerOutput = sh(script: 'packer build .', returnStdout: true).trim()
+                    PACKER_AMI_ID = packerOutput =~ /ami-.+/ ? packerOutput =~ /ami-.+/.toString() : ''
+                    // Convert the matched AMI ID to string and store it in PACKER_AMI_ID, or set it to an empty string if no match is found
+                }
             }
         }
         

@@ -14,11 +14,11 @@ pipeline {
         
         stage('Run Build Init') {
             steps {
-
-                    // Run Packer build and capture the AMI ID
                     script {
-                        PACKER_AMI_ID = sh(script: 'packer build . | grep "ami-" | cut -d \':\' -f2', returnStdout: true).trim()
-                }
+            // Run Packer build and capture the AMI ID
+            def packerOutput = sh(script: 'packer build .', returnStdout: true).trim()
+            PACKER_AMI_ID = packerOutput =~ /ami-.+/
+        }
             }
         }
         

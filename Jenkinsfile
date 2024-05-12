@@ -5,16 +5,17 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Clone the repository from GitHub
-                git 'https://github.com/your-username/your-repo.git'
+                git branch: 'main', url: 'https://github.com/shreya0522/c-369.git' 
             }
         }
         
         stage('Run Build Init') {
             steps {
                 // Change directory to the cloned repository
-                dir('your-repo-directory') {
+                dir('c-369') {
                     // Run the build init command
-                    sh 'build init'
+                    sh 'packer init'
+                    sh 'packer build .'
                 }
             }
         }

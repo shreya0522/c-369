@@ -8,7 +8,7 @@ source "amazon-ebs" "ubuntu" {
 
 build {
   name    = "nginx-3"
-  sources = ["amazon-ebs.ubuntu"] 
+  sources = ["source.amazon-ebs.ubuntu"] 
 
   provisioner "file" {
     source      = "index.html"

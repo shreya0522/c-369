@@ -1,6 +1,9 @@
 pipeline {
     agent any
     
+    environment {
+        PACKER_AMI_ID = ''
+    }
     
     stages {
         stage('Clone Repository') {
@@ -11,11 +14,12 @@ pipeline {
         
         stage('Run Build Init') {
             steps {
-               
+                dir('c-369') {
                     sh 'packer init'
                     // Run Packer build and capture the AMI ID
                     script {
                         PACKER_AMI_ID = sh(script: 'packer build . | grep "ami-" | cut -d \':\' -f2', returnStdout: true).trim()
+                    }
                 }
             }
         }

@@ -1,5 +1,9 @@
 pipeline {
     agent any
+
+    environment {
+        PATH = "$PATH:/usr/bin/packer"
+    }
     
     stages {
         stage('Clone Repository') {

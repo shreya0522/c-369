@@ -12,11 +12,10 @@ pipeline {
         stage('Run Build Init') {
             steps {
                 // Change directory to the cloned repository
-                dir('c-369') {
                     // Run the build init command
                    // sh 'packer init'
                     sh 'packer build .'
-                }
+            
             }
         }
     }

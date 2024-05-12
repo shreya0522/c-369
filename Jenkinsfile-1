@@ -1,0 +1,28 @@
+packer {
+  required_plugins {
+    amazon = {
+      version = ">= 1.2.8"
+      source  = "github.com/hashicorp/amazon"
+    }
+  }
+}
+
+source "amazon-ebs" "ubuntu" {
+  ami_name      = "nginx-2"
+  instance_type = "t2.micro"
+  region        = "us-west-1"
+  source_ami    = "ami-0a15fc3cf14435d43" 
+  ssh_username  = "ubuntu"
+}
+
+build {
+  name    = "nginx-2"
+  sources = ["source.amazon-ebs.ubuntu"] 
+
+  provisioner "shell" {
+    inline = [
+        "sudo bash -c 'echo \"hello world\" > /var/www/html/index.nginx-debian.html' > /tmp/provision.log 2>&1", # Redirect output to log file
+         "sudo systemctl restart nginx >> /tmp/provision.log 2>&1" # Redirect output to log file
+    ]
+  }
+}

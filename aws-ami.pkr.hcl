@@ -8,7 +8,7 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "nginx-ami"
+  ami_name      = "nginx-3"
   instance_type = "t2.micro"
   region        = "us-west-1"
   source_ami    = "ami-0a15fc3cf14435d43" 
@@ -16,7 +16,7 @@ source "amazon-ebs" "ubuntu" {
 }
 
 build {
-  name    = "nginx-3"
+  name    = "my-first-build"
   sources = ["source.amazon-ebs.ubuntu"] 
 
   provisioner "file" {

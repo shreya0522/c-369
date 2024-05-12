@@ -1,9 +1,6 @@
 pipeline {
     agent any
     
-    environment {
-        PACKER_AMI_ID = ''
-    }
     
     stages {
         stage('Clone Repository') {

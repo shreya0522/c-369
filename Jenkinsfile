@@ -17,7 +17,8 @@ pipeline {
                 script {
                     // Run Packer build and capture the AMI ID
                     def packerOutput = sh(script: 'packer build .', returnStdout: true).trim()
-                    PACKER_AMI_ID = packerOutput =~ /ami-.+/ ? packerOutput =~ /ami-.+/.toString() : ''
+                    def matcher = (packerOutput =~ /ami-.+/)
+                    PACKER_AMI_ID = matcher.find() ? matcher.group() : ''
                     // Convert the matched AMI ID to string and store it in PACKER_AMI_ID, or set it to an empty string if no match is found
                 }
             }

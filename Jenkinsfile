@@ -15,8 +15,7 @@ pipeline {
         stage('Run Build Init') {
             steps {
                
-                    sh 'packer init'
-                    // Run Packer build and capture the AMI ID
+             sh '/usr/bin/packer init'                    // Run Packer build and capture the AMI ID
                 //     script {
                 //         PACKER_AMI_ID = sh(script: 'packer build . | grep "ami-" | cut -d \':\' -f2', returnStdout: true).trim()
                 // }

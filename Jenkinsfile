@@ -1,9 +1,5 @@
 pipeline {
     agent any
-
-    environment {
-        PATH = "$PATH:/usr/bin/packer"
-    }
     
     stages {
         stage('Clone Repository') {
@@ -16,10 +12,8 @@ pipeline {
         stage('Run Build Init') {
             steps {
                 // Change directory to the cloned repository
-                dir('c-369') {
                     // Run the build init command
                     sh 'packer init'
-                }
             }
         }
     }

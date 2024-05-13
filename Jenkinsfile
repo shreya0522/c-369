@@ -94,6 +94,6 @@ pipeline {
                     sh 'aws autoscaling start-instance-refresh --auto-scaling-group-name c360-asg --preferences \'{"InstanceWarmup": 60, "MinHealthyPercentage": 50}\''
                 }
             }
-        // }
+        }
     }
 }

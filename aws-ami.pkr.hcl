@@ -8,7 +8,7 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "nginx-3"
+  ami_name      = "nginx-c360"
   instance_type = "t2.micro"
   region        = "us-west-1"
   source_ami    = "ami-0a15fc3cf14435d43" 

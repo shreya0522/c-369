@@ -37,28 +37,31 @@ pipeline {
         
         stage('Create Launch Template Version') {
             steps {
-                script {
-                    // Run the command to create launch template version and capture the output
-                    def createVersionOutput = sh(script: """
-                        aws ec2 create-launch-template-version \
-                            --launch-template-name C360-TEMPLATE \
-                            --source-version 1 \
-                            --version-description 'Version 3 with updated AMI' \
-                            --launch-template-data '{ "ImageId": "ami-0b702bb0136516fb6", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }'
-                    """, returnStdout: true).trim()
-        
-                    // Check if there was any error or warning in the output
-                    if (createVersionOutput.contains("error") || createVersionOutput.contains("warning")) {
-                        error "Error or warning occurred during launch template version creation:\n $createVersionOutput"
-                    }
-        
-                    // Extract the version number from the output
-                    def versionMatcher = (createVersionOutput =~ /"VersionNumber"\s*:\s*(\d+)/)
-                    LAUNCH_TEMPLATE_VERSION = versionMatcher.find() ? versionMatcher.group(1) : ''
-        
-                    // Echo the created version number
-                    echo "Created launch template version: $LAUNCH_TEMPLATE_VERSION"
-                    }
+              script {
+            // Run the command to create launch template version and capture the output
+            def createVersionOutput = sh(script: """
+                aws ec2 create-launch-template-version \
+                    --launch-template-name C360-TEMPLATE \
+                    --source-version 1 \
+                    --version-description 'Version 3 with updated AMI' \
+                    --launch-template-data '{ "ImageId": "ami-0b702bb0136516fb6", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }'
+            """, returnStdout: true).trim()
+
+            // Print the output for debugging
+            echo "Create Launch Template Version Output: $createVersionOutput"
+
+            // Check if there was any error or warning in the output
+            if (createVersionOutput.contains("error") || createVersionOutput.contains("warning")) {
+                error "Error or warning occurred during launch template version creation:\n $createVersionOutput"
+            }
+
+            // Extract the version number from the output
+            def versionMatcher = (createVersionOutput =~ /"VersionNumber"\s*:\s*(\d+)/)
+            LAUNCH_TEMPLATE_VERSION = versionMatcher.find() ? versionMatcher.group(1) : ''
+
+            // Echo the created version number
+            echo "Created launch template version: $LAUNCH_TEMPLATE_VERSION"
+               }
             }
         }
         

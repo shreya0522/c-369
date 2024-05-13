@@ -37,22 +37,29 @@ pipeline {
         
         stage('Create Launch Template Version') {
             steps {
-              script {
+                  script {
+            // Define a file to capture command output
+            def outputFileName = "create-launch-template-version-output.txt"
+
             // Run the command to create launch template version and capture the output
-            def createVersionOutput = sh(script: """
+            sh """
                 aws ec2 create-launch-template-version \
                     --launch-template-name C360-TEMPLATE \
                     --source-version 1 \
                     --version-description 'Version 3 with updated AMI' \
-                    --launch-template-data '{ "ImageId": "ami-0b702bb0136516fb6", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }'
-            """, returnStdout: true).trim()
+                    --launch-template-data '{ "ImageId": "ami-0b702bb0136516fb6", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }' \
+                    > ${outputFileName} 2>&1
+            """
+
+            // Read the output file
+            def createVersionOutput = readFile(outputFileName).trim()
 
             // Print the output for debugging
-            echo "Create Launch Template Version Output: $createVersionOutput"
+            echo "Create Launch Template Version Output: ${createVersionOutput}"
 
             // Check if there was any error or warning in the output
             if (createVersionOutput.contains("error") || createVersionOutput.contains("warning")) {
-                error "Error or warning occurred during launch template version creation:\n $createVersionOutput"
+                error "Error or warning occurred during launch template version creation:\n ${createVersionOutput}"
             }
 
             // Extract the version number from the output
@@ -60,8 +67,8 @@ pipeline {
             LAUNCH_TEMPLATE_VERSION = versionMatcher.find() ? versionMatcher.group(1) : ''
 
             // Echo the created version number
-            echo "Created launch template version: $LAUNCH_TEMPLATE_VERSION"
-               }
+            echo "Created launch template version: ${LAUNCH_TEMPLATE_VERSION}"
+                 }
             }
         }
         

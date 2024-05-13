@@ -47,7 +47,7 @@ pipeline {
                     --launch-template-name C360-TEMPLATE \
                     --source-version 1 \
                     --version-description 'Version 3 with updated AMI' \
-                    --launch-template-data '{ "ImageId": "ami-0b702bb0136516fb6", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }' \
+                    --launch-template-data '{ "ImageId": "${PACKER_AMI_ID}", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }' \
                     > ${outputFileName} 2>&1
             """
 

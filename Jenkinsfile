@@ -37,7 +37,13 @@ pipeline {
         stage('Create Launch Template Version') {
             steps {
                 script {
-                    sh 'aws ec2 create-launch-template-version --launch-template-name C360-TEMPLATE --source-version 1 --version-description "Version 3 with updated AMI" --launch-template-data \'{ "ImageId": "${PACKER_AMI_ID}", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }\''
+                    sh """
+                aws ec2 create-launch-template-version \
+                    --launch-template-name C360-TEMPLATE \
+                    --source-version 1 \
+                    --version-description 'Version 3 with updated AMI' \
+                    --launch-template-data '{ "ImageId": "${PACKER_AMI_ID}", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }'
+            """
                 }
             }
         }

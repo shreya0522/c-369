@@ -16,10 +16,10 @@ pipeline {
             steps {
                 script {
           // Run Packer build and capture the AMI ID from the output file
-            sh 'packer build . | tee packer-output.txt' // Output Packer build output to a file
+           sh 'packer build . | tee packer-output.txt' // Output Packer build output to a file
             def packerOutput = readFile('packer-output.txt') // Read the output from the file
-            def matcher = (packerOutput =~ /ami-[a-f0-9]{8,}/)
-            PACKER_AMI_ID = matcher.find() ? matcher.group() : ''
+            def matcher = (packerOutput =~ /AMIs were created:[^\n]*\n[^\n]*: ([^\n]*)/)
+            PACKER_AMI_ID = matcher.find() ? matcher.group(1) : ''
             // Store the matched AMI ID in PACKER_AMI_ID, or set it to an empty string if no match is found
                }
             }

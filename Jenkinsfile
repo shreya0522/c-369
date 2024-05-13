@@ -72,28 +72,28 @@ pipeline {
             }
         }
         
-        // stage('Modify Launch Template') {
-        //     steps {
-        //         script {
-        //             sh 'aws ec2 modify-launch-template --launch-template-name C360-TEMPLATE --default-version 3'
-        //         }
-        //     }
-        // }
+        stage('Modify Launch Template') {
+            steps {
+                script {
+                    sh "aws ec2 modify-launch-template --launch-template-name C360-TEMPLATE --default-version ${LAUNCH_TEMPLATE_VERSION}"
+                }
+            }
+        }
         
-        // stage('Update Auto Scaling Group') {
-        //     steps {
-        //         script {
-        //             sh 'aws autoscaling update-auto-scaling-group --auto-scaling-group-name c360-asg --launch-template "LaunchTemplateName=C360-TEMPLATE,Version=3"'
-        //         }
-        //     }
-        // }
+        stage('Update Auto Scaling Group') {
+            steps {
+                script {
+                    sh "aws autoscaling update-auto-scaling-group --auto-scaling-group-name c360-asg --launch-template \"LaunchTemplateName=C360-TEMPLATE,Version=${LAUNCH_TEMPLATE_VERSION}\""
+                }
+            }
+        }
         
-        // stage('Start Instance Refresh') {
-        //     steps {
-        //         script {
-        //             sh 'aws autoscaling start-instance-refresh --auto-scaling-group-name c360-asg --preferences \'{"InstanceWarmup": 60, "MinHealthyPercentage": 50}\''
-        //         }
-        //     }
+        stage('Start Instance Refresh') {
+            steps {
+                script {
+                    sh 'aws autoscaling start-instance-refresh --auto-scaling-group-name c360-asg --preferences \'{"InstanceWarmup": 60, "MinHealthyPercentage": 50}\''
+                }
+            }
         // }
     }
 }

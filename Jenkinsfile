@@ -37,7 +37,7 @@ pipeline {
         stage('Create Launch Template Version') {
             steps {
                 script {
-                    sh 'aws ec2 create-launch-template-version --launch-template-name C360-TEMPLATE --source-version 1 --version-description "Version 2 with updated AMI" --launch-template-data \'{ "ImageId": "${PACKER_AMI_ID}", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }\''
+                    sh 'aws ec2 create-launch-template-version --launch-template-name C360-TEMPLATE --source-version 1 --version-description "Version 3 with updated AMI" --launch-template-data \'{ "ImageId": "${PACKER_AMI_ID}", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }\''
                 }
             }
         }
@@ -45,7 +45,7 @@ pipeline {
         stage('Modify Launch Template') {
             steps {
                 script {
-                    sh 'aws ec2 modify-launch-template --launch-template-name C360-TEMPLATE --default-version 2'
+                    sh 'aws ec2 modify-launch-template --launch-template-name C360-TEMPLATE --default-version 3'
                 }
             }
         }
@@ -53,7 +53,7 @@ pipeline {
         stage('Update Auto Scaling Group') {
             steps {
                 script {
-                    sh 'aws autoscaling update-auto-scaling-group --auto-scaling-group-name c360-asg --launch-template "LaunchTemplateName=C360-TEMPLATE,Version=2"'
+                    sh 'aws autoscaling update-auto-scaling-group --auto-scaling-group-name c360-asg --launch-template "LaunchTemplateName=C360-TEMPLATE,Version=3"'
                 }
             }
         }

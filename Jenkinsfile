@@ -37,14 +37,22 @@ pipeline {
         
         stage('Create Launch Template Version') {
             steps {
-                script {
-                    sh """
-                aws ec2 create-launch-template-version \
-                    --launch-template-name C360-TEMPLATE \
-                    --source-version 1 \
-                    --version-description 'Version 3 with updated AMI' \
-                    --launch-template-data '{ "ImageId": "${PACKER_AMI_ID}", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }'
-            """
+               script {
+                    // Create launch template version and capture the output
+                    def createVersionOutput = sh(script: """
+                        aws ec2 create-launch-template-version \
+                            --launch-template-name C360-TEMPLATE \
+                            --source-version 1 \
+                            --version-description 'Version 3 with updated AMI' \
+                            --launch-template-data '{ "ImageId": "${PACKER_AMI_ID}", "InstanceType": "t2.micro", "SecurityGroupIds": ["sg-0b7f7d077bfefa5fd"] }'
+                    """, returnStdout: true).trim()
+                    
+                    // Extract the version number from the output
+                    def versionMatcher = (createVersionOutput =~ /"VersionNumber"\s*:\s*(\d+)/)
+                    LAUNCH_TEMPLATE_VERSION = versionMatcher.find() ? versionMatcher.group(1) : ''
+                    
+                    // Echo the created version number
+                    echo "Created launch template version: $LAUNCH_TEMPLATE_VERSION"
                 }
             }
         }
